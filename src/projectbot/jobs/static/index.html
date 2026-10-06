@@ -233,7 +233,7 @@
           : "За выбранные дни подходящих вакансий нет. Расширьте период или уберите город.";
         return;
       }
-      const tail = hidden ? ` Ещё ${hidden} соседних объявлений скрыто.` : "";
+      const tail = hidden ? ` Ещё ${hidden} ${hiddenPhrase(hidden)} скрыто.` : "";
       status.textContent = `${items.length} ${plural(items.length)} за ${document.querySelector("#period").value} дн.${tail}`;
       list.innerHTML = items.map((item) => {
         const href = safeUrl(item.url);
@@ -249,6 +249,14 @@
           ${snippet}
         </article>`;
       }).join("");
+    }
+
+    function hiddenPhrase(count) {
+      const mod10 = count % 10;
+      const mod100 = count % 100;
+      if (mod10 === 1 && mod100 !== 11) return "соседнее объявление";
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "соседних объявления";
+      return "соседних объявлений";
     }
 
     function plural(count) {
