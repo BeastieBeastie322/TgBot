@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Пульт — вакансии медиаинженера</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@460;560;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #101410;
+      --card: #1b221b;
+      --line: #313a30;
+      --text: #f4f1e8;
+      --muted: #a7aea0;
+      --tally: #ff4d3a;
+      --preview: #d6f25c;
+      --soft: #242c23;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(900px 420px at 10% -10%, rgba(214, 242, 92, 0.08), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: Manrope, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.45;
+    }
+    .wrap { width: min(1080px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 64px; }
+    header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-end; margin-bottom: 22px; }
+    .mark { display: flex; align-items: center; gap: 10px; margin: 0 0 8px; letter-spacing: 0.14em; font-size: 13px; color: var(--muted); }
+    .tally { width: 10px; height: 10px; border-radius: 50%; background: var(--tally); box-shadow: 0 0 0 4px rgba(255, 77, 58, 0.18); }
+    h1 { margin: 0; font-size: clamp(32px, 5vw, 52px); line-height: 0.95; font-weight: 700; }
+    .lede { margin: 10px 0 0; max-width: 62ch; color: var(--muted); }
+    form {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+    }
+    .chip[aria-pressed="true"] { background: var(--preview); color: #17200c; border-color: transparent; font-weight: 700; }
+    .row { display: grid; grid-template-columns: 1.4fr 0.8fr 1fr auto; gap: 10px; }
+    label { display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+    input, select {
+      width: 100%;
+      background: #101510;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: inherit;
+    }
+    .checks { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; }
+    .checks label { display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 15px; }
+    button[type="submit"] {
+      align-self: end;
+      background: var(--text);
+      color: #14180f;
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.55; cursor: progress; }
+    .status { min-height: 24px; margin: 16px 0; color: var(--muted); }
+    .status.error { color: #ffb4ab; }
+    .list { display: grid; gap: 12px; }
+    article {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+    }
+    article h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.25; }
+    article h2 a { color: inherit; text-decoration: none; }
+    article h2 a:hover { color: var(--preview); }
+    .meta { color: var(--muted); margin: 0 0 10px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .tag { background: #2a3818; color: var(--preview); border-radius: 999px; padding: 3px 8px; font-size: 13px; }
+    .salary { margin: 0; font-weight: 700; }
+    .snippet { margin: 8px 0 0; color: var(--muted); }
+    .empty { padding: 8px 0 0; color: var(--muted); max-width: 62ch; }
+    @media (max-width: 800px) {
+      .row { grid-template-columns: 1fr; }
+      header { display: block; }
+      button[type="submit"] { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <p class="mark"><span class="tally" aria-hidden="true"></span> ПУЛЬТ</p>
+        <h1>Вакансии эфира и ВКС</h1>
+        <p class="lede">Ищет на hh.ru роли медиаинженера, видеоинженера, мультимедиа, видеоконференцсвязи и трансляций. Видеонаблюдение, продажи и другие соседние объявления в список не попадают.</p>
+      </div>
+    </header>
+    <form id="search">
+      <div class="chips" id="chips">
+        <button type="button" class="chip" data-group="video" aria-pressed="true">Видеоинженер</button>
+        <button type="button" class="chip" data-group="media" aria-pressed="true">Медиаинженер</button>
+        <button type="button" class="chip" data-group="vcs" aria-pressed="true">ВКС</button>
+        <button type="button" class="chip" data-group="broadcast" aria-pressed="true">Трансляции</button>
+        <button type="button" class="chip" data-group="multimedia" aria-pressed="true">Мультимедиа</button>
+      </div>
+      <div class="row">
+        <label>Город
+          <input id="city" name="city" placeholder="Вся выдача hh.ru, если пусто" autocomplete="off">
+        </label>
+        <label>За сколько дней
+          <select id="period" name="period">
+            <option value="7">7</option>
+            <option value="14" selected>14</option>
+            <option value="30">30</option>
+          </select>
+        </label>
+        <label>Опыт
+          <select id="experience" name="experience">
+            <option value="">Любой</option>
+            <option value="noExperience">Без опыта</option>
+            <option value="between1And3">1–3 года</option>
+            <option value="between3And6">3–6 лет</option>
+            <option value="moreThan6">Более 6 лет</option>
+          </select>
+        </label>
+        <button type="submit" id="go">Найти</button>
+      </div>
+      <div class="checks">
+        <label><input id="remote" type="checkbox"> Только удалённо</label>
+        <label><input id="salary" type="checkbox"> Только с зарплатой</label>
+      </div>
+    </form>
+    <p class="status" id="status" role="status">Смотрю свежие вакансии на hh.ru.</p>
+    <div class="list" id="list"></div>
+  </div>
+  <script>
+    const form = document.querySelector("#search");
+    const list = document.querySelector("#list");
+    const status = document.querySelector("#status");
+    const go = document.querySelector("#go");
+
+    document.querySelectorAll(".chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        chip.setAttribute("aria-pressed", chip.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      search();
+    });
+
+    function selectedGroups() {
+      return [...document.querySelectorAll(".chip")]
+        .filter((chip) => chip.getAttribute("aria-pressed") === "true")
+        .map((chip) => chip.dataset.group);
+    }
+
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      }[char]));
+    }
+
+    function safeUrl(url) {
+      try {
+        const parsed = new URL(url);
+        if (parsed.protocol === "https:" && /(^|\.)hh\.ru$/.test(parsed.hostname)) return parsed.href;
+      } catch (_) {}
+      return "";
+    }
+
+    async function search() {
+      const groups = selectedGroups();
+      list.replaceChildren();
+      if (!groups.length) {
+        status.className = "status error";
+        status.textContent = "Выберите хотя бы одно направление.";
+        return;
+      }
+      go.disabled = true;
+      status.className = "status";
+      status.textContent = "Смотрю свежие вакансии на hh.ru.";
+      try {
+        const response = await fetch("/api/search", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            groups,
+            city: document.querySelector("#city").value,
+            remote_only: document.querySelector("#remote").checked,
+            with_salary: document.querySelector("#salary").checked,
+            period_days: Number(document.querySelector("#period").value),
+            experience: document.querySelector("#experience").value,
+          }),
+        });
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.detail || "Не удалось получить вакансии.");
+        render(payload);
+      } catch (error) {
+        status.className = "status error";
+        status.textContent = error.message || "Не удалось получить вакансии.";
+      } finally {
+        go.disabled = false;
+      }
+    }
+
+    function render(payload) {
+      const items = payload.items || [];
+      const hidden = payload.hidden || 0;
+      if (!items.length) {
+        status.textContent = hidden
+          ? `hh.ru что-то нашёл, но ${hidden} объявлений не про эти роли.`
+          : "За выбранные дни подходящих вакансий нет. Расширьте период или уберите город.";
+        return;
+      }
+      const tail = hidden ? ` Ещё ${hidden} соседних объявлений скрыто.` : "";
+      status.textContent = `${items.length} ${plural(items.length)} за ${document.querySelector("#period").value} дн.${tail}`;
+      list.innerHTML = items.map((item) => {
+        const href = safeUrl(item.url);
+        const title = href ? `<a href="${esc(href)}" target="_blank" rel="noreferrer">${esc(item.title)}</a>` : esc(item.title);
+        const bits = [item.company, item.area, item.schedule, item.experience, item.published].filter(Boolean);
+        const tags = (item.tags || []).map((tag) => `<span class="tag">${esc(tag)}</span>`).join("");
+        const snippet = item.snippet ? `<p class="snippet">${esc(item.snippet)}</p>` : "";
+        return `<article>
+          <div class="tags">${tags}</div>
+          <h2>${title}</h2>
+          <p class="meta">${esc(bits.join(" · "))}</p>
+          <p class="salary">${esc(item.salary)}</p>
+          ${snippet}
+        </article>`;
+      }).join("");
+    }
+
+    function plural(count) {
+      const mod10 = count % 10;
+      const mod100 = count % 100;
+      if (mod10 === 1 && mod100 !== 11) return "вакансия";
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "вакансии";
+      return "вакансий";
+    }
+
+    search();
+  </script>
+</body>
+</html>
