@@ -1,5 +1,12 @@
 # Бот проектов и помощник по вакансиям
 
+Репозиторий: [github.com/BeastieBeastie322/TgBot](https://github.com/BeastieBeastie322/TgBot)
+
+```bash
+git clone https://github.com/BeastieBeastie322/TgBot.git
+cd TgBot
+```
+
 Сейчас в репозитории два отдельных инструмента. Telegram-бот выбирает проекты Cursor. «Пульт» ищет вакансии медиаинженера, видеоинженера, ВКС и трансляций. В бота поиск подключится отдельно, страница уже работает сама.
 
 ## Пульт
